@@ -1,0 +1,14 @@
+Display_LCD.c:14:6:init_LCD	8	static
+Display_LCD.c:22:6:testSuDueRighe	40	static
+Display_LCD.c:40:6:init_modo_4bit	8	static
+Display_LCD.c:64:6:SetLCD	8	static
+Display_LCD.c:91:6:LcdStrobe	16	static
+Display_LCD.c:99:6:lcd_cmd	16	static
+Display_LCD.c:107:6:CodeOut	16	static
+Display_LCD.c:146:6:PulisciSchermo	8	static
+Display_LCD.c:154:6:StampaInteroSuLCD	32	static
+Display_LCD.c:162:6:go_xy	24	static
+Display_LCD.c:184:6:StampaStringaSuLCD	16	static
+Display_LCD.c:191:6:StampaCarattereSuLCD	16	static
+Display_LCD.c:197:6:lcd_puts	16	static
+Display_LCD.c:204:6:lcd_data	16	static
