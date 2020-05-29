@@ -1,9 +1,5 @@
-Keyb_4x4.c:40:6:AttivaPinKeyb4x4	16	static
-Keyb_4x4.c:66:6:StartKeyb4x4	8	static
-Keyb_4x4.c:77:6:GestioneRigheMatriceKeyb4x4	8	static
-Keyb_4x4.c:104:6:RiconosciTastoAttivato	16	static
-Keyb_4x4.c:159:6:GestioneEXTI_Keyb4x4	16	static
-Keyb_4x4.c:168:6:CheckPassword	8	static
-Keyb_4x4.c:196:6:Sound	16	static
-Keyb_4x4.c:212:6:CheckIntrusion	8	static
-Keyb_4x4.c:220:6:LedAlarm	8	static
+Keyb_4x4.c:39:6:AttivaPinKeyb4x4	16	static
+Keyb_4x4.c:65:6:StartKeyb4x4	8	static
+Keyb_4x4.c:76:6:GestioneRigheMatriceKeyb4x4	8	static
+Keyb_4x4.c:103:6:RiconosciTastoAttivato	16	static
+Keyb_4x4.c:167:6:GestioneEXTI_Keyb4x4	16	static

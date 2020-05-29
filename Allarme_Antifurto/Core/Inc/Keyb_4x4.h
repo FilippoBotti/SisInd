@@ -10,8 +10,6 @@
 
 #define DURATA_VALORE_BASSO 10
 #define TEMPO_AR_KEYB4x4 100
-#define TEMPO_STROBE 500
-#define TEMPO_AR_PIR 400
 extern unsigned char TastoPremuto;
 extern uint8_t CicloKeyb4x4Attivo;
 
@@ -21,9 +19,6 @@ void GestioneARButton(void);
 void AttivaPinKeyb4x4(uint8_t index);
 void GestioneEXTI_Keyb4x4(uint16_t GPIO_Pin);
 void RiconosciTastoAttivato(void);
-void CheckPassword(void);
-void Sound(int strobe);
-void CheckIntrusion(void);
-void LedAlarm(void);
+
 
 #endif /* INC_KEYB_4X4_H_ */

@@ -22,6 +22,7 @@
 #include "stm32f4xx_it.h"
 #include "main.h"
 #include "Keyb_4x4.h"
+#include "Alarm.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -45,6 +46,7 @@
 /* USER CODE BEGIN PV */
 extern uint8_t TempoAR_Pir;
 extern int strobe;
+extern int allarme;
 extern uint32_t strobeBuffer;
 /* USER CODE END PV */
 
@@ -191,15 +193,8 @@ void SysTick_Handler(void)
   /* USER CODE BEGIN SysTick_IRQn 1 */
   GestioneRigheMatriceKeyb4x4();
 
-  if(TempoAR_Pir)   //se è attivo un tempo antirimbalzo
-  		{
-  		TempoAR_Pir--;
-  		if(!TempoAR_Pir)
-  			{
-  			HAL_NVIC_EnableIRQ(EXTI3_IRQn);
 
-  			}
-  		}
+  if(allarme){
   if(strobeBuffer)   //se è attivo un tempo antirimbalzo
   		{
   		strobeBuffer--;
@@ -214,7 +209,7 @@ void SysTick_Handler(void)
   			}
   		}
 
-
+  }
 
   /* USER CODE END SysTick_IRQn 1 */
 }

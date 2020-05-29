@@ -28,7 +28,7 @@ Core/Src/Keyb_4x4.o: ../Core/Src/Keyb_4x4.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Core/Inc/Keyb_4x4.h ../Core/Inc/main.h ../Core/Inc/Display_LCD.h \
- ../Core/Inc/tim.h ../Core/Inc/main.h
+ ../Core/Inc/tim.h ../Core/Inc/main.h ../Core/Inc/Alarm.h
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 
@@ -95,3 +95,5 @@ Core/Src/Keyb_4x4.o: ../Core/Src/Keyb_4x4.c \
 ../Core/Inc/tim.h:
 
 ../Core/Inc/main.h:
+
+../Core/Inc/Alarm.h:

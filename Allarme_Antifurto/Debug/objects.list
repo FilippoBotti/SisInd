@@ -1,3 +1,4 @@
+"Core/Src/Alarm.o"
 "Core/Src/Display_LCD.o"
 "Core/Src/Keyb_4x4.o"
 "Core/Src/gpio.o"

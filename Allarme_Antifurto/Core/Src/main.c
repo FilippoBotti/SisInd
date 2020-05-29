@@ -27,7 +27,7 @@
 #include "gpio.h"
 #include "Display_LCD.h"
 #include "Keyb_4x4.h"
-
+#include "Alarm.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -49,11 +49,13 @@
 
 /* Private variables ---------------------------------------------------------*/
 char lettera[6];
+char password[6];
 int cursore = -1;
 int allarme = 0;
 uint8_t TempoAR_Pir;
 int strobe=1;
 uint32_t strobeBuffer;
+int tentativi=0;
 /* USER CODE BEGIN PV */
 
 
@@ -105,27 +107,9 @@ int main(void)
   init_LCD();
   HAL_NVIC_DisableIRQ(EXTI3_IRQn);
   /* USER CODE END 2 */
-
-
-   //testSuDueRighe();
-
-
-
   StartKeyb4x4();
 
-
-   for(int i=0; i<15; i++){
-	   if(i%3==0){
-		   PulisciSchermo();
-	   }
-	   StampaStringaSuLCD(0, 0, "Initializing");
-	   StampaStringaSuLCD(i%3+12, 0, ".");
-
-	   HAL_Delay(1000);
-   }
-   PulisciSchermo();
-   StampaStringaSuLCD(0, 0, "Ready");
-
+  InitAlarm();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -136,7 +120,10 @@ int main(void)
 		if(TastoPremuto)
 			{
 			PulisciSchermo();
-			StampaStringaSuLCD(0, 0, lettera);
+			StampaStringaSuLCD(0, 0, "Password:");
+			StampaStringaSuLCD(10, 0, password);
+			StampaStringaSuLCD(0,1,"Tentativi:");
+			StampaInteroSuLCD(10, 1, tentativi);
 			TastoPremuto=0;
 			}
     /* USER CODE BEGIN 3 */

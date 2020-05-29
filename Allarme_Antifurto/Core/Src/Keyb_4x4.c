@@ -12,19 +12,18 @@
 #include "string.h"
 #include "Display_LCD.h"
 #include "tim.h"
+#include "Alarm.h"
+#include "string.h"
 
 uint16_t DurataValoreBasso;
 uint8_t IndiceCicloKeyb4x4=0;
 uint8_t CicloKeyb4x4Attivo=0;
 extern char lettera[6];
+extern char password[6];
 extern int cursore;
-extern int allarme;
 uint16_t TempoAR_Keyb4x4;
-extern uint32_t TempoAR_Pir;
 uint16_t PinAttivato;
-extern uint32_t strobeBuffer;
-extern int strobe;
-int intrusion =0;
+
 const unsigned char TastiKeyb4x4[4][4] =
 	{
 		{'1','2','3','A'},
@@ -146,7 +145,16 @@ void RiconosciTastoAttivato(void)
 	 	if(!nTasti){
 	 		TastoPremuto=TastoAttivo;
 	 		cursore++;
-	 		lettera[cursore]=TastoAttivo;
+	 		if(cursore!=6){
+	 			lettera[cursore]=TastoAttivo;
+	 			password[cursore] = TastiKeyb4x4[3][0];
+	 		}
+	 		else{
+	 			cursore=-1;
+	 			memset(lettera,0,strlen(lettera));
+	 			memset(password,0,strlen(password));
+	 		}
+
 
 	 	}//pubblico il tasto primario su una  riga
 	 	if(TastoAttivo!=TastoAttivoPrec)   //conteggio di tasti premuti sulla
@@ -163,77 +171,4 @@ void GestioneEXTI_Keyb4x4(uint16_t GPIO_Pin)
 	TempoAR_Keyb4x4=TEMPO_AR_KEYB4x4;     //per un tempo di antirimbalzo
 	PinAttivato= GPIO_Pin;                //catturo il pin attivato
 	}
-
-
-void CheckPassword(void){
-	if(strcmp(lettera,"123456")==0){
-		memset(lettera,0,strlen(lettera));
-		cursore=-1;
-		if(allarme==0){
-			allarme=1;
-			HAL_NVIC_EnableIRQ(EXTI3_IRQn);
-			PulisciSchermo();
-			StampaStringaSuLCD(0, 0, "Alarm on");
-		}
-		else {
-			allarme=0;
-			HAL_NVIC_DisableIRQ(EXTI3_IRQn);
-			intrusion=0;
-			HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_1);
-			PulisciSchermo();
-			StampaStringaSuLCD(0, 0, "Alarm off");
-		}
-	}
-	else{
-		PulisciSchermo();
-		StampaStringaSuLCD(0, 1, "Wrong code");
-		memset(lettera,0,strlen(lettera));
-		cursore=-1;
-	}
-	LedAlarm();
-}
-
-void Sound(int strobe){
-	if(allarme&&intrusion){
-		if(strobe)
-		{
-			HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-			HAL_GPIO_WritePin(RED_LED_GPIO_Port, RED_LED_Pin, 1);
-		}
-		else
-		{
-			HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_1);
-			HAL_GPIO_WritePin(RED_LED_GPIO_Port, RED_LED_Pin, 0);
-
-		}
-	}
-}
-
-void CheckIntrusion(void){
-	HAL_NVIC_DisableIRQ(EXTI3_IRQn);  //disabilito interruzioni 10-15
-	TempoAR_Pir = TEMPO_AR_PIR;
-	strobeBuffer = TEMPO_STROBE;
-	intrusion=1;
-	Sound(strobe);
-}
-
-void LedAlarm(void){
-	if(intrusion)
-		HAL_GPIO_WritePin(WHITE_LED_GPIO_Port, WHITE_LED_Pin, 1);
-	else
-	    HAL_GPIO_WritePin(WHITE_LED_GPIO_Port, WHITE_LED_Pin, 0);
-	if(!allarme && !intrusion)
-	{
-    	HAL_GPIO_WritePin(YELLOW_LED_GPIO_Port, YELLOW_LED_Pin, 1);
-		HAL_GPIO_WritePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin, 0);
-	}
-	else if(allarme && !intrusion)
-	{
-		HAL_GPIO_WritePin(YELLOW_LED_GPIO_Port, YELLOW_LED_Pin, 0);
-		HAL_GPIO_WritePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin, 1);
-	}
-}
-
-
-
 
