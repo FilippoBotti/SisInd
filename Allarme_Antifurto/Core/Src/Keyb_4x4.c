@@ -15,12 +15,18 @@
 #include "Alarm.h"
 #include "string.h"
 
+/*
+ * Le variabili che importiamo sono le stringhe per la gestione della password
+ * e il rispettivo cursore
+ * Le variabili locali invece sono tutte destinate alla gestione della tastiera 4x4
+ */
+
 uint16_t DurataValoreBasso;
 uint8_t IndiceCicloKeyb4x4=0;
 uint8_t CicloKeyb4x4Attivo=0;
 extern char lettera[6];
 extern char password[6];
-extern int cursore;
+extern uint8_t cursore;
 uint16_t TempoAR_Keyb4x4;
 uint16_t PinAttivato;
 
@@ -36,9 +42,12 @@ const unsigned char TastiKeyb4x4[4][4] =
 
 unsigned char  TastoPremuto=0;
 
+/*
+ * Funzione che provoca la rotazione di '0' tra le varie righe
+ */
 void AttivaPinKeyb4x4(uint8_t index)
 	{
-	/* provoco la rotazione del bit '0'*/
+
 
 	HAL_GPIO_WritePin(R1_GPIO_Port, R1_Pin,GPIO_PIN_SET);
 	HAL_GPIO_WritePin(R2_GPIO_Port, R2_Pin,GPIO_PIN_SET);
@@ -62,6 +71,10 @@ void AttivaPinKeyb4x4(uint8_t index)
 
 	}
 
+/*
+ * Funzione di inizializzazione della tastiera
+ * Rendiamo attivo il ciclo, impostiamo la durata dello '0' nelle righe
+ */
 void StartKeyb4x4(void)
 	{
     CicloKeyb4x4Attivo=1;
@@ -71,7 +84,8 @@ void StartKeyb4x4(void)
 
 
 /*
- * funzione utilizzata per i tempi di antirimbalzo e per la rotazione dello '0' sulle varie righe
+ * Funzione utilizzata per i tempi di antirimbalzo
+ *  e per la rotazione dello '0' sulle varie righe
  */
 void GestioneRigheMatriceKeyb4x4(void)
 	{
@@ -99,6 +113,12 @@ void GestioneRigheMatriceKeyb4x4(void)
 		}
 	}
 
+
+/*
+ * Funzione per il riconoscimento del tasto premuto
+ * e inserimento del tasto premuto nella stringa
+ * Cripting password, per ogni tasto premuto mostro un '*'
+ */
 
 void RiconosciTastoAttivato(void)
 {
@@ -131,10 +151,7 @@ void RiconosciTastoAttivato(void)
 		if(nTasti)     //
 			nTasti--;
 	 	if(!nTasti)
-	 	//Devo verificare che su altre righe vi siano tasti premuti, contarli ...
 	 		{
-	 		//Verifica che su altre righe vi siano tasti premuti, e li conta (NON SCRITTA)
-	 		//nTasti=ContaTastiPremuti();
 	 		DurataValoreBasso=DURATA_VALORE_BASSO;
 	 		CicloKeyb4x4Attivo=1;   // al rilascio, riattivo il ciclo
 	 		TastoAttivoPrec=0;
@@ -163,12 +180,16 @@ void RiconosciTastoAttivato(void)
 	 	}
 	}
 
-
+/*
+ * Gestione del tasto premuto, disabilitazione del ciclo
+ * e disabilitazione interruzioni per un
+ * tempo di antirimbalzo
+ */
 void GestioneEXTI_Keyb4x4(uint16_t GPIO_Pin)
 	{
-	CicloKeyb4x4Attivo=0;                 //dichiaro il ciclo di rotazione dello '0'non attivo
-	HAL_NVIC_DisableIRQ(EXTI9_5_IRQn);  //disabilito interruzioni 10-15
-	TempoAR_Keyb4x4=TEMPO_AR_KEYB4x4;     //per un tempo di antirimbalzo
-	PinAttivato= GPIO_Pin;                //catturo il pin attivato
+	CicloKeyb4x4Attivo=0;
+	HAL_NVIC_DisableIRQ(EXTI9_5_IRQn);
+	TempoAR_Keyb4x4=TEMPO_AR_KEYB4x4;
+	PinAttivato= GPIO_Pin;
 	}
 

@@ -8,8 +8,7 @@
 #ifndef INC_ALARM_H_
 #define INC_ALARM_H_
 #define TEMPO_STROBE 500
-#define TEMPO_AR_PIR 400
-
+#define TEMPO_AR_BUTTON 100
 void CheckPassword(void);
 void Sound(int strobe);
 void CheckIntrusion(void);

@@ -1,7 +1,7 @@
-Alarm.c:27:6:InitAlarm	16	static
-Alarm.c:43:6:CheckPassword	8	static
-Alarm.c:72:6:AllarmeAttivo	8	static
-Alarm.c:79:6:AllarmeDisattivato	8	static
-Alarm.c:90:6:Sound	16	static
-Alarm.c:106:6:CheckIntrusion	8	static
-Alarm.c:113:6:LedAlarm	8	static
+Alarm.c:41:6:InitAlarm	16	static
+Alarm.c:69:6:CheckPassword	8	static
+Alarm.c:105:6:AllarmeAttivo	8	static
+Alarm.c:118:6:AllarmeDisattivato	8	static
+Alarm.c:138:6:Sound	16	static
+Alarm.c:163:6:CheckIntrusion	8	static
+Alarm.c:178:6:LedAlarm	8	static

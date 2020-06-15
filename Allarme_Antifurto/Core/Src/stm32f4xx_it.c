@@ -44,10 +44,16 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-extern uint8_t TempoAR_Pir;
-extern int strobe;
-extern int allarme;
+/*
+ * Le variabili che importiamo sono quelle necessarie al lampeggio
+ * del led e della sirena per l'allarme
+ */
+extern uint8_t strobe;
+extern uint8_t allarme;
+extern uint8_t intrusion;
 extern uint32_t strobeBuffer;
+
+uint32_t tempoAR_Button;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -191,10 +197,20 @@ void SysTick_Handler(void)
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
+
+  /*
+   * Utilizziamo il timer della scheda per gestire il ciclo
+   * delle righe della tastiera
+   */
   GestioneRigheMatriceKeyb4x4();
 
 
-  if(allarme){
+  /*
+   * Utilizziamo il timer della scheda per attuare il lampeggio
+   * del led rosso e della sirena di allarme
+   */
+
+  if(intrusion){
   if(strobeBuffer)   //se è attivo un tempo antirimbalzo
   		{
   		strobeBuffer--;
@@ -210,6 +226,14 @@ void SysTick_Handler(void)
   		}
 
   }
+
+  if(tempoAR_Button)   //se è attivo un tempo antirimbalzo
+    	{
+    		tempoAR_Button--;
+    		if(!tempoAR_Button){
+    			HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+    		}
+    	}
 
   /* USER CODE END SysTick_IRQn 1 */
 }
@@ -266,20 +290,39 @@ void EXTI15_10_IRQHandler(void)
   /* USER CODE END EXTI15_10_IRQn 1 */
 }
 
-/* USER CODE BEGIN 1 */
+/* USER CODE BEGIN 1
+ * Gestione delle interruzioni*/
+
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
+	/* Interruzioni generate dalla tastiera richiamano la funzione di gestione
+	 * dei tasti premuti
+	 */
 	if((GPIO_Pin==C1_Pin)||(GPIO_Pin==C2_Pin)||(GPIO_Pin==C3_Pin)||(GPIO_Pin==C4_Pin))
 		GestioneEXTI_Keyb4x4(GPIO_Pin);
-	if(GPIO_Pin==B1_Pin){
-		if(!HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin)){
-			CheckPassword();
-		}
-	}
-	if(GPIO_Pin==PIR_Pin){
-		while(!HAL_GPIO_ReadPin(PIR_GPIO_Port,PIR_Pin));
-		CheckIntrusion();
 
+	/* Interruzione generata dal pulsante di invio (pulsante blu della scheda)
+	 * che viene attivata sul fronte di discesa (schema antirimbalzo) e richiama
+	 * il controllo della password inserita
+	 * Settaggio di 20ms per la gestione dell'antirimbalzo
+	 */
+	if(GPIO_Pin==B1_Pin){
+		if(!HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin))
+			CheckPassword();
+		tempoAR_Button = TEMPO_AR_BUTTON;
+		HAL_NVIC_DisableIRQ(EXTI15_10_IRQn);
+	}
+
+	/* Interruzione generata dal sensore di movimento PIR
+	 * che viene attivato sul fronte di discesa e richiama
+	 * la funzione di gestione dell'allarme
+	 */
+
+	if(GPIO_Pin==PIR_Pin){
+		if(allarme){
+			while(!HAL_GPIO_ReadPin(PIR_GPIO_Port,PIR_Pin));
+			CheckIntrusion();
+		}
 	}
 
 }

@@ -50,12 +50,12 @@
 /* Private variables ---------------------------------------------------------*/
 char lettera[6];
 char password[6];
-int cursore = -1;
+uint8_t cursore = -1;
 int allarme = 0;
 uint8_t TempoAR_Pir;
-int strobe=1;
+uint8_t strobe=1;
 uint32_t strobeBuffer;
-int tentativi=0;
+uint8_t tentativi=0;
 /* USER CODE BEGIN PV */
 
 
@@ -103,19 +103,27 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_TIM2_Init();
-  /* USER CODE BEGIN 2 */
-  init_LCD();
-  HAL_NVIC_DisableIRQ(EXTI3_IRQn);
-  /* USER CODE END 2 */
-  StartKeyb4x4();
 
+  /* USER CODE BEGIN 2
+   * Inizializzazione dei dispositivi Display, Tastiera, Allarme
+   * e disabilitazione interruzioni sensore di movimento PIR */
+
+  init_LCD();
+
+  StartKeyb4x4();
   InitAlarm();
+  /* USER CODE END 2 */
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
 
     /* USER CODE END WHILE */
+
+	  /* USER CODE BEGIN 3
+	   * Nel loop infinito aggiorniamo i led e mostriamo sul display
+	   * una simil interfaccia per comunicare con la scheda */
 	  	LedAlarm();
 		if(TastoPremuto)
 			{
@@ -126,7 +134,7 @@ int main(void)
 			StampaInteroSuLCD(10, 1, tentativi);
 			TastoPremuto=0;
 			}
-    /* USER CODE BEGIN 3 */
+
   }
   /* USER CODE END 3 */
 }

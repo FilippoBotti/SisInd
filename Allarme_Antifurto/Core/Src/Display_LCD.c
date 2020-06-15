@@ -10,15 +10,20 @@
 #include "Display_LCD.h"
 #include "main.h"
 
-
+/*
+ * Funzione di inizializzazione display lcd
+ */
 void init_LCD(void)
 	{
-	init_modo_4bit();//lavorer� con solo 4 bit dati
-	SetLCD ();       // pulizia iniziale
-	go_xy(0,0) ;
+	init_modo_4bit();
+	SetLCD ();
+	go_xy(0,0);
 	}
 
-// test su due righe
+/*
+ * Funzione di test display lcd, utilizzata solo in una
+ * prima fase di debug e successivamente rimossa dal codice
+ */
 void testSuDueRighe(void)
 	{
 	char str[21];
